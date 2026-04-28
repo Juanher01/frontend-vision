@@ -7,6 +7,7 @@ export default function HistoryPage() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
 
   const loadHistory = async () => {
     try {
@@ -21,19 +22,20 @@ export default function HistoryPage() {
     }
   };
 
-  const deleteItem = async (id) => {
-    const confirmDelete = confirm("¿Deseas eliminar este análisis?");
-    if (!confirmDelete) return;
+  const deleteItem = async () => {
+    if (!deleteId) return;
 
     try {
-      await api.delete(`/history/${id}`);
-      setItems((prev) => prev.filter((item) => item.id !== id));
+      await api.delete(`/history/${deleteId}`);
+      setItems((prev) => prev.filter((item) => item.id !== deleteId));
       setSelected(null);
 
       toast.success("Análisis eliminado correctamente");
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.detail || "No se pudo eliminar el análisis");
+    } finally {
+      setDeleteId(null);
     }
   };
 
@@ -145,7 +147,7 @@ export default function HistoryPage() {
                 </div>
 
                 <button
-                  onClick={() => deleteItem(selected.id)}
+                  onClick={() => setDeleteId(item.id)}
                   className="w-full border border-red-200 text-red-600 px-4 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-red-50"
                 >
                   <Trash2 size={16} />
