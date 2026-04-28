@@ -3,11 +3,13 @@ import { Leaf, History, Home as HomeIcon, ScanLine } from "lucide-react";
 import Home from "./pages/Home";
 import Result from "./pages/Result";
 import HistoryPage from "./pages/History";
+import { Toaster } from "sonner";
 
 export default function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-slate-100 text-slate-900">
+        <Toaster richColors position="top-right" />
         <header className="bg-white shadow-sm sticky top-0 z-50">
           <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-2 font-bold text-lg">

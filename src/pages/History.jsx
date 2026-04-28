@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Trash2, RefreshCw, X } from "lucide-react";
 import { api, getImageUrl } from "../services/api";
+import { toast } from "sonner";
 
 export default function HistoryPage() {
   const [items, setItems] = useState([]);
@@ -14,7 +15,7 @@ export default function HistoryPage() {
       setItems(response.data);
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.detail || "No se pudo cargar el historial.");
+      toast.error("No se pudo cargar el historial");
     } finally {
       setLoading(false);
     }
@@ -28,9 +29,11 @@ export default function HistoryPage() {
       await api.delete(`/history/${id}`);
       setItems((prev) => prev.filter((item) => item.id !== id));
       setSelected(null);
+
+      toast.success("Análisis eliminado correctamente");
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.detail || "No se pudo eliminar el análisis.");
+      toast.error(error.response?.data?.detail || "No se pudo eliminar el análisis");
     }
   };
 

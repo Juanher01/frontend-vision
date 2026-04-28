@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Save, AlertCircle, History } from "lucide-react";
 import { api, getImageUrl } from "../services/api";
+import { toast } from "sonner";
 
 export default function Result() {
   const navigate = useNavigate();
@@ -13,30 +14,30 @@ export default function Result() {
     if (saved) setResult(JSON.parse(saved));
   }, []);
 
-  const saveAnalysis = async () => {
-    if (!result) return;
+const saveAnalysis = async () => {
+  if (!result) return;
 
-    if (result.saved) {
-      alert("Este análisis ya fue guardado.");
-      return;
-    }
+  if (result.saved) {
+    toast.info("Este análisis ya fue guardado");
+    return;
+  }
 
-    try {
-      setSaving(true);
-      const response = await api.post("/save-analysis", result);
+  try {
+    setSaving(true);
+    const response = await api.post("/save-analysis", result);
 
-      const updated = { ...result, id: response.data.id, saved: true };
-      setResult(updated);
-      localStorage.setItem("lastAnalysis", JSON.stringify(updated));
+    const updated = { ...result, id: response.data.id, saved: true };
+    setResult(updated);
+    localStorage.setItem("lastAnalysis", JSON.stringify(updated));
 
-      alert("Análisis guardado correctamente.");
-    } catch (error) {
-      console.error(error);
-      alert(error.response?.data?.detail || "No se pudo guardar el análisis.");
-    } finally {
-      setSaving(false);
-    }
-  };
+    toast.success("Análisis guardado correctamente");
+  } catch (error) {
+    console.error(error);
+    toast.error(error.response?.data?.detail || "No se pudo guardar el análisis");
+  } finally {
+    setSaving(false);
+  }
+};
 
   if (!result) {
     return (
