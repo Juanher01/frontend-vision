@@ -147,7 +147,7 @@ export default function HistoryPage() {
                 </div>
 
                 <button
-                  onClick={() => setDeleteId(item.id)}
+                  onClick={() => setDeleteId(selected.id)}
                   className="w-full border border-red-200 text-red-600 px-4 py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-red-50"
                 >
                   <Trash2 size={16} />
